@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Meal, type: :model do
   subject {
-    described_class.new(name: "Caprese Salad", photo: "sample.jpg", rating: 4)
+    described_class.new(name: "Caprese Salad", photo: "defaultPhoto.png", rating: 4)
   }
 
   it "should be valid with valid attributes" do
