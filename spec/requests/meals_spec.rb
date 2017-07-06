@@ -4,6 +4,7 @@ RSpec.describe 'Meals API', type: :request do
 
   #initialize test data
   let!(:meals) { create_list(:meal, 1) }
+  let(:meal_id) { meals.first.id }
 
   # Test for GET /meals
   describe 'GET /meals' do
@@ -12,7 +13,7 @@ RSpec.describe 'Meals API', type: :request do
 
     it 'returns meals' do
       expect(json).not_to be_empty
-      expect(json).to eq(1)
+      expect(json.size).to eq(1)
     end
 
     it 'returns status code 200' do
@@ -23,7 +24,7 @@ RSpec.describe 'Meals API', type: :request do
 
   # Test for GET /meals/:id
   describe 'GET /meals/:id' do
-    before { get '/meals/#{meal_id}' }
+    before { get "/meals/#{meal_id}" }
 
     context 'when the record exists' do
       it 'returns the meal' do
@@ -44,7 +45,7 @@ RSpec.describe 'Meals API', type: :request do
       end
 
       it 'returns a not found message' do
-        expect(response.body).to match(/Couldn't find Meal/)
+        expect(response.body).to match(/Couldn't find Meal with 'id'=#{meal_id}/)
       end
     end
   end
@@ -102,7 +103,7 @@ RSpec.describe 'Meals API', type: :request do
       end
 
       it 'returns a validation error message' do
-        expect(response.body).to match(/Validation failed: Rating can't be greater than 5/)
+        expect(response.body).to match(/Validation failed: Rating must be less than or equal to 5/)
       end
     end
   end
