@@ -3,13 +3,16 @@ require 'rails_helper'
 RSpec.describe 'Meals API', type: :request do
 
   #initialize test data
+  let(:user) { create(:user) }
   let!(:meals) { create_list(:meal, 1) }
   let(:meal_id) { meals.first.id }
+  # authorize request
+  let(:headers) { valid_headers }
 
   # Test for GET /meals
   describe 'GET /meals' do
 
-    before { get '/meals' }
+    before { get '/meals', params: {}, headers: headers }
 
     it 'returns meals' do
       expect(json).not_to be_empty
@@ -24,7 +27,7 @@ RSpec.describe 'Meals API', type: :request do
 
   # Test for GET /meals/:id
   describe 'GET /meals/:id' do
-    before { get "/meals/#{meal_id}" }
+    before { get "/meals/#{meal_id}", params: {}, headers: headers }
 
     context 'when the record exists' do
       it 'returns the meal' do
@@ -60,7 +63,7 @@ RSpec.describe 'Meals API', type: :request do
     let(:invalid_rating) { { name: "Caprese Salad", photo: "samplePhoto.png", rating: '7' } }
 
     context 'when the request is valid' do
-      before { post '/meals', params: valid_attributes }
+      before { post '/meals', params: valid_attributes.to_json, headers: headers }
 
       it 'creates a meal' do
         expect(json['name']).to eq('Caprese Salad')
@@ -72,7 +75,7 @@ RSpec.describe 'Meals API', type: :request do
     end
 
     context 'when the request is invalid and user didnt enter a meal name' do
-      before { post '/meals', params: empty_name}
+      before { post '/meals', params: empty_name.to_json, headers: headers}
 
       it 'returns status code of 422' do
         expect(response).to have_http_status(422)
@@ -84,7 +87,7 @@ RSpec.describe 'Meals API', type: :request do
     end
 
     context 'when the request is invalid and user didnt enter a rating' do
-      before { post '/meals', params: empty_rating}
+      before { post '/meals', params: empty_rating.to_json, headers: headers }
 
       it 'returns status code of 422' do
         expect(response).to have_http_status(422)
@@ -96,7 +99,7 @@ RSpec.describe 'Meals API', type: :request do
     end
 
     context 'when the request is invalid and user entered a rating greater than 5' do
-      before { post '/meals', params: invalid_rating}
+      before { post '/meals', params: invalid_rating.to_json, headers: headers }
 
       it 'returns status code of 422' do
         expect(response).to have_http_status(422)
@@ -114,7 +117,7 @@ RSpec.describe 'Meals API', type: :request do
     let(:valid_attributes) { { name: 'Other Salad' } }
 
     context 'when the record exists' do
-      before { put "/meals/#{meal_id}", params: valid_attributes }
+      before { put "/meals/#{meal_id}", params: valid_attributes.to_json, headers: headers }
 
       it 'updates the record' do
         expect(response.body).to be_empty
@@ -129,7 +132,7 @@ RSpec.describe 'Meals API', type: :request do
 
   #  Test for DELETE /meals/:id
   describe 'DELETE /meals/:id' do
-    before { delete "/meals/#{meal_id}"}
+    before { delete "/meals/#{meal_id}", params: {}, headers: headers }
 
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
