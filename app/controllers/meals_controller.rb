@@ -3,19 +3,19 @@ class MealsController < ApplicationController
 
   # GET /meals
   def index
-    @meals = Meal.all
-    render json: @meals, status: :ok
+    meals = Meal.all
+    render :json => { meals: meals }, status: :ok
   end
 
   # POST /meals
   def create
     @meal = Meal.create!(meal_params)
-    render json: @meal, status: :created
+    render :json => { meals: @meal }, status: :created
   end
 
   # GET /meals/1
   def show
-    render json: @meal, status: :ok
+    render :json => { meals: @meal }, status: :ok
   end
 
   # PUT /meals/1
