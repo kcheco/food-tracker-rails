@@ -60,3 +60,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'bcrypt', '~> 3.1', '>= 3.1.11'
 gem 'jwt', '~> 1.5', '>= 1.5.6'
 gem 'active_model_serializers', '~> 0.10.6'
+gem 'carrierwave', '~> 1.1'
+gem 'mini_magick', '~> 4.8'
+gem 'carrierwave-aws', '~> 1.1'
